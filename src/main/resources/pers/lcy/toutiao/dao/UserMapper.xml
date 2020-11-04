@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.lcy.toutiao.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="pers.lcy.toutiao.model.User">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"  />
+      <arg column="name"  javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="salt" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="head_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, password, salt, head_url
+  </sql>
+  <insert id="addUser" parameterType="pers.lcy.toutiao.model.User">
+    INSERT INTO user(id,name,password,salt,head_url) VALUES (#{id},#{name},#{password},#{salt},#{headUrl})
+  </insert>
+  <select id="selectUserById" resultType="pers.lcy.toutiao.model.User">
+    SELECT * FROM user WHERE id=#{id}
+  </select>
+  <select id="selectUserByName" resultType="pers.lcy.toutiao.model.User">
+    SELECT * FROM  user WHERE  name=#{name}
+  </select>
+  <select id="selectUserIdByName" resultType="int">
+    SELECT id FROM user WHERE name=#{name}
+  </select>
+
+</mapper>

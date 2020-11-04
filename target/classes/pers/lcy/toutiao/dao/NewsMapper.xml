@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.lcy.toutiao.dao.NewsMapper">
+  <resultMap id="BaseResultMap" type="pers.lcy.toutiao.model.News">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="link" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="like_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="comment_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="delete_state" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, link, image, like_count, comment_count, created_date, user_id, delete_state
+  </sql>
+  <select id="selectByUserIdAndOffset" resultType="pers.lcy.toutiao.model.News">
+    SELECT * FROM NEWS
+    <if test="userId!=0">
+      WHERE user_id=#{userId}
+    </if>
+    ORDER BY id desc
+    limit #{offset},#{limit}
+  </select>
+  <insert id="insertNews" parameterType="pers.lcy.toutiao.model.News">
+    INSERT INTO news(id,title,link,image,like_count,comment_count,user_id) VALUES (
+    #{id},#{title},#{link},#{image},#{likeCount},#{commentCount},#{userId})
+  </insert>
+</mapper>
