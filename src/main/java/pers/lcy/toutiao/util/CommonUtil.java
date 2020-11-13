@@ -19,6 +19,12 @@ public class CommonUtil {
 
     public static String ImageStorePath="D:/toutiaoImage/";
 
+    public static String NewsTitleNormalRegex="[\\u4e00-\\u9fa5a-zA-Z0-9]+";
+
+    public static String MinganRegex="[\\S]*(杀人|鬼|淫|奸)+[\\S]*";
+
+    public static String LinkRegex="(http|ftp)(s)?://(\\w)+(\\.\\w+)+(/[\\w_\\?\\.&=%-]+)+";
+
     public static String getJsonString(int code){
         JSONObject jsonObejct=new JSONObject();
         jsonObejct.put("code",code);

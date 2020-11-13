@@ -5,7 +5,7 @@
                 #foreach($msg in $messages)
                 <li id="msg-item-4009580">
                     <a class="list-head">
-                        <img alt="头像" src="$!{msg.headUrl}">
+                        <img alt="头像" src="$!{msg.user.headUrl}">
                     </a>
                     <div class="tooltip fade right in">
                         <div class="tooltip-arrow"></div>

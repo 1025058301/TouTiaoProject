@@ -1,15 +1,11 @@
 package pers.lcy.toutiao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import pers.lcy.toutiao.model.News;
-import pers.lcy.toutiao.model.ViewObject;
 import pers.lcy.toutiao.service.NewsService;
 import pers.lcy.toutiao.service.UserService;
 import pers.lcy.toutiao.service.ViewObjectService;
@@ -19,7 +15,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -41,14 +36,19 @@ public class IndexController {
     HostHolder hostHolder;
 
     @RequestMapping("/")
-    public String index(Model model) {
-        model.addAttribute("vos",viewObjectService.getViewObjectFromUserId(0));
+    public String index(Model model,
+                        @RequestParam(value = "pop",defaultValue = "0") int pop) {
+        model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(0));
+        if(hostHolder.get()!=null){
+            pop=0;
+        }
+        model.addAttribute("pop",pop);
         return "home";
     }
 
     @RequestMapping("/user/{userId}")
     public String userIndex(Model model,@PathVariable("userId") int userId){
-        model.addAttribute("vos",viewObjectService.getViewObjectFromUserId(userId));
+        model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(userId));
         return "home";
     }
 

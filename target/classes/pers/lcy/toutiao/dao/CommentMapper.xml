@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.lcy.toutiao.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="pers.lcy.toutiao.model.Comment">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="entity_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="entity_type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="pers.lcy.toutiao.model.Comment">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="entity_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="entity_type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <insert id="insertComment" parameterType="pers.lcy.toutiao.model.Comment">
+    INSERT INTO comment(id,content,user_id,entity_id,entity_type,status)
+    VALUES (#{id},#{content},#{userId},#{entityId},#{entityType},#{status})
+  </insert>
+  <select id="selectCommentCount" resultType="int">
+    SELECT COUNT(id) FROM comment WHERE entity_id=#{entityId} AND entity_type=#{entityType}
+  </select>
+  <select id="selectCommentsByEntity" resultType="pers.lcy.toutiao.model.Comment">
+    SELECT * FROM comment WHERE entity_id=#{entityId} AND entity_type=#{entityType} ORDER BY id DESC
+  </select>
+</mapper>

@@ -79,7 +79,10 @@ var oPopupUpload = new PopupUpload({
                     data: {image: that.image, title: sTitle, link: sLink},
                     dataType: 'json'
                 }).done(function (oResult) {
-                    that.emit('done');
+                    if(oResult.code==0){that.emit('done');}
+                    else {
+                        alert(oResult.msg)
+                    }
                 }).fail(function (oResult) {
                     alert('出现错误，请重试');
                 }).always(function () {

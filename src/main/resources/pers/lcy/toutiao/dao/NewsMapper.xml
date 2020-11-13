@@ -29,4 +29,10 @@
     INSERT INTO news(id,title,link,image,like_count,comment_count,user_id) VALUES (
     #{id},#{title},#{link},#{image},#{likeCount},#{commentCount},#{userId})
   </insert>
+  <select id="selectById" resultType="pers.lcy.toutiao.model.News">
+    SELECT * FROM news WHERE id=#{newsId}
+  </select>
+  <update id="updateCommentCount">
+    UPDATE news SET comment_count =#{commentCount} WHERE id=#{newsId}
+  </update>
 </mapper>

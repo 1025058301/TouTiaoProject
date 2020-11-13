@@ -12,4 +12,8 @@ public interface NewsMapper {
     @Param("limit") int limit);
 
     void insertNews(News news);
+
+    News selectById(@Param("newsId") int id);
+
+    void updateCommentCount(@Param("newsId") int newsId,@Param("commentCount") int count);
 }
