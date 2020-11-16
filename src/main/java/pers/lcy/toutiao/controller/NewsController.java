@@ -44,6 +44,9 @@ public class NewsController {
     @Autowired
     ViewObjectService viewObjectService;
 
+    @Autowired
+    LikeService likeService;
+
     @RequestMapping(value = "/uploadImage", method = {RequestMethod.POST})
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file) {
@@ -98,6 +101,11 @@ public class NewsController {
         News news = newsService.selectNewsById(newsId);
         User user = userService.getUser(news.getUserId());
         List<ViewObject> comments=viewObjectService.getCommentView(newsId,EntityType.NEWSTYPE);
+        if(hostHolder.get()!=null){
+            model.addAttribute("like",likeService.getLikeStatus(hostHolder.get().getId(),EntityType.NEWSTYPE,newsId));
+        }else {
+            model.addAttribute("like",0);
+        }
         model.addAttribute("comments",comments);
         model.addAttribute("news", news);
         model.addAttribute("owner", user);

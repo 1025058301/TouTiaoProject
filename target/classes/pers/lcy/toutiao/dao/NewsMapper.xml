@@ -35,4 +35,7 @@
   <update id="updateCommentCount">
     UPDATE news SET comment_count =#{commentCount} WHERE id=#{newsId}
   </update>
+  <update id="updateLikeCount">
+    UPDATE news SET like_count=#{likeCount} WHERE id=#{newsId}
+  </update>
 </mapper>

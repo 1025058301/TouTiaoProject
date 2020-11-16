@@ -2,10 +2,7 @@ package pers.lcy.toutiao.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.lcy.toutiao.model.Comment;
-import pers.lcy.toutiao.model.Message;
-import pers.lcy.toutiao.model.News;
-import pers.lcy.toutiao.model.ViewObject;
+import pers.lcy.toutiao.model.*;
 import pers.lcy.toutiao.util.HostHolder;
 
 import java.util.ArrayList;
@@ -28,6 +25,9 @@ public class ViewObjectService {
     @Autowired
     HostHolder hostHolder;
 
+    @Autowired
+    LikeService likeService;
+
 
     public List<ViewObject> getNewsViewFromUserId(int userId){
         List<News> list=newsService.getNews(userId,0,10);
@@ -36,6 +36,11 @@ public class ViewObjectService {
             ViewObject viewObject=new ViewObject();
             viewObject.set("news",news);
             viewObject.set("user",userService.getUser(news.getUserId()));
+            if(hostHolder.get()!=null){
+                viewObject.set("like",likeService.getLikeStatus(hostHolder.get().getId(), EntityType.NEWSTYPE,news.getId()));
+            }else {
+                viewObject.set("like",0);
+            }
             vos.add(viewObject);
         }
         return vos;

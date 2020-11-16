@@ -77,7 +77,12 @@ public class NewsService {
         return CommonUtil.Domain+"image?name="+fileName;
     }
 
-    public void updateNewsCommentCount(int newsId,int count){
-        newsMapper.updateCommentCount(newsId,count);
+    public void updateNewsCommentCount(int newsId,int Commentcount){
+        newsMapper.updateCommentCount(newsId,Commentcount);
+    }
+
+    public void updateNewsLikeCount(int newsId, int likeCount) {
+        newsMapper.updateLikeCount(newsId, likeCount);
     }
 }
+

@@ -60,13 +60,13 @@ public class LoginController {
                     cookie.setMaxAge(3600*24*2);
                 }
                 response.addCookie(cookie);
-                return CommonUtil.getJsonString(0,"注册成功");
+                return CommonUtil.getJsonString(0,"登录成功");
             }
             return CommonUtil.getJsonString(1,result);
 
         }catch (Exception e){
             logger.error("注册异常 "+e.getMessage());
-            return CommonUtil.getJsonString(1,"注册异常");
+            return CommonUtil.getJsonString(1,"登录异常");
         }
     }
 

@@ -34,7 +34,7 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        logger.info(httpServletRequest.getRequestURI());
+        logger.info(httpServletRequest.getRequestURI()+"验证登录拦截器被调用");
         if(httpServletRequest.getCookies()==null||o instanceof ResourceHttpRequestHandler){
             return true;
         }
