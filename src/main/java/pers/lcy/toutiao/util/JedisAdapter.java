@@ -10,6 +10,8 @@ import pers.lcy.toutiao.controller.LoginController;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 @Component
 public class JedisAdapter implements InitializingBean {
     public static Logger logger= LoggerFactory.getLogger(JedisAdapter.class);
@@ -83,6 +85,35 @@ public class JedisAdapter implements InitializingBean {
                 jedis.close();
             }
         }
+    }
+
+    public void lpush(String key,String value){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            jedis.lpush(key,value);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+    }
+
+    public String rpop(String key){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.rpop(key);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+        return null;
     }
 
     public void pushObject(String key,Object obj){
