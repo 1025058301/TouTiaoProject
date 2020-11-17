@@ -1,5 +1,7 @@
 package pers.lcy.toutiao.util;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -81,5 +83,27 @@ public class JedisAdapter implements InitializingBean {
                 jedis.close();
             }
         }
+    }
+
+    public void pushObject(String key,Object obj){
+        String value= JSON.toJSONString(obj);
+        Jedis jedis=null;
+        try{
+            jedis=getJedis();
+            jedis.lpush(key,value);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+    }
+    public <T> T popObject(String key,Class<T> clazz){
+        Jedis jedis=null;
+        String object=null;
+        try{
+            jedis=getJedis();
+            object=jedis.rpop(key);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return JSON.parseObject(object,clazz);
     }
 }
