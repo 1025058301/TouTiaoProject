@@ -15,6 +15,10 @@ public class EventModel {
     private int entityOwnerId;
     private Map<String,String> environment=new HashMap<>();
 
+    public Map<String, String> getEnvironment() {
+        return environment;
+    }
+
     public EventModel(EventType type){
         this.type=type;
     }
@@ -68,14 +72,13 @@ public class EventModel {
         return this;
     }
 
-    public String getValFromEnvironment(String name) {
-        return this.environment.get(name);
-    }
-
-    public EventModel setValToEnvironment(String name,String val) {
-        this.environment.put(name,val);
+    public EventModel setProperty(String name,String value){
+        this.environment.put(name,value);
         return this;
     }
 
+    public String getProperty(String name){
+        return this.environment.get(name);
+    }
 
 }

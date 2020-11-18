@@ -41,7 +41,7 @@ public class LoginController {
                     cookie.setMaxAge(3600*24*2);
                 }
                 response.addCookie(cookie);
-                eventProducer.produceEvent(new EventModel(EventType.REGISTER).setValToEnvironment("to",username));
+                eventProducer.produceEvent(new EventModel(EventType.REGISTER).setProperty("to",username));
                 return CommonUtil.getJsonString(0,"注册成功");
             }
             return CommonUtil.getJsonString(1,result);

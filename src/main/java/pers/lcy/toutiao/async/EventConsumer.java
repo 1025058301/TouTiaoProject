@@ -1,6 +1,7 @@
 package pers.lcy.toutiao.async;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -50,7 +51,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                 while (true){
                     String event=jedisAdapter.rpop(RedisKeyUtil.getBizEvent());
                     if(event==null)continue;
-                    EventModel eventModel= JSON.parseObject(event,EventModel.class);
+                    EventModel eventModel= JSONObject.parseObject(event,EventModel.class);
                     if(!config.containsKey(eventModel.getType())){
                         logger.error("不能识别的事件");
                         continue;
