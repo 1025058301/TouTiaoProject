@@ -31,7 +31,7 @@
   </select>
   <select id="selectConversation" resultType="pers.lcy.toutiao.model.Message">
     SELECT from_id,to_id,created_date,has_read,conversation_id,content,count(id) as id FROM
-    (SELECT  * FROM message WHERE from_id=#{userId} OR to_id=#{userId} ORDER BY id desc) tt GROUP BY conversation_id ORDER BY tt.id desc
+    (SELECT  * FROM message WHERE from_id=#{userId} OR to_id=#{userId} ORDER BY id DESC LIMIT 10000) tt GROUP BY conversation_id ORDER BY tt.id desc
     LIMIT #{offset},#{limit}
   </select>
   <select id="selectUnReadCount" resultType="int">

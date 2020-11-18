@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pers.lcy.toutiao.async.EventModel;
+import pers.lcy.toutiao.async.EventProducer;
+import pers.lcy.toutiao.async.EventType;
 import pers.lcy.toutiao.model.EntityType;
 import pers.lcy.toutiao.service.LikeService;
 import pers.lcy.toutiao.service.NewsService;
@@ -27,6 +30,9 @@ public class LikeController {
     @Autowired
     NewsService newsService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     @RequestMapping(value = "/like",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String like(@RequestParam("newsId") int newsId){
@@ -36,6 +42,10 @@ public class LikeController {
         logger.info("有用户点赞了");
         long likeCount=likeService.addLikeUser(hostHolder.get().getId(), EntityType.NEWSTYPE,newsId);
         newsService.updateNewsLikeCount(newsId,(int)likeCount);
+        eventProducer.produceEvent(new EventModel(EventType.LIKE).setActorId(hostHolder.get().getId())
+                .setEntityId(newsId).setEntityId(newsId).setEntityId(newsId).setEntityType(EntityType.NEWSTYPE)
+                .setEntityOwnerId(newsService.selectNewsById(newsId).getUserId())
+        );
         return CommonUtil.getJsonString(0,String.valueOf(likeCount));
     }
 
