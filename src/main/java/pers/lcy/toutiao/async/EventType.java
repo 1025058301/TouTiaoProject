@@ -6,7 +6,8 @@ public enum EventType {
      */
     LIKE(0),
     EMAIL(1),
-    COMMENT(2);
+    COMMENT(2),
+    REGISTER(3);
     private int value;
     private EventType(int val){
         this.value=val;

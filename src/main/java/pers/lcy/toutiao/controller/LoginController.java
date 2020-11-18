@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pers.lcy.toutiao.async.EventModel;
+import pers.lcy.toutiao.async.EventProducer;
+import pers.lcy.toutiao.async.EventType;
 import pers.lcy.toutiao.service.UserService;
 import pers.lcy.toutiao.util.CommonUtil;
 
@@ -19,6 +22,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(value = "/reg",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
@@ -35,6 +41,7 @@ public class LoginController {
                     cookie.setMaxAge(3600*24*2);
                 }
                 response.addCookie(cookie);
+                eventProducer.produceEvent(new EventModel(EventType.REGISTER).setValToEnvironment("to",username));
                 return CommonUtil.getJsonString(0,"注册成功");
             }
             return CommonUtil.getJsonString(1,result);
