@@ -25,16 +25,24 @@
     ORDER BY id desc
     limit #{offset},#{limit}
   </select>
-  <insert id="insertNews" parameterType="pers.lcy.toutiao.model.News">
+
+  <insert id="insertNews" parameterType="pers.lcy.toutiao.model.News" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO news(id,title,link,image,like_count,comment_count,user_id) VALUES (
     #{id},#{title},#{link},#{image},#{likeCount},#{commentCount},#{userId})
   </insert>
+
+  <select id="selectLatestNews" resultType="pers.lcy.toutiao.model.News">
+    SELECT * FROM news ORDER BY id limit #{limit}
+  </select>
+
   <select id="selectById" resultType="pers.lcy.toutiao.model.News">
     SELECT * FROM news WHERE id=#{newsId}
   </select>
+
   <update id="updateCommentCount">
     UPDATE news SET comment_count =#{commentCount} WHERE id=#{newsId}
   </update>
+
   <update id="updateLikeCount">
     UPDATE news SET like_count=#{likeCount} WHERE id=#{newsId}
   </update>

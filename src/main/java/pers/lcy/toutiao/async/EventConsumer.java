@@ -44,6 +44,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                 config.get(eventType).add(entry.getValue());
             }
         }
+
         Executor executor= new ThreadPoolExecutor(1,1,1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>());
         executor.execute(new Runnable() {
             @Override

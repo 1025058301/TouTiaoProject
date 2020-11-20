@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.util.Map;
+import java.util.Random;
 
 public class CommonUtil {
     public static Logger logger= LoggerFactory.getLogger(CommonUtil.class);
@@ -17,13 +18,15 @@ public class CommonUtil {
 
     public static String QiniuDomain="http://qj95rst59.hn-bkt.clouddn.com/";
 
+    public static String HeadUrlPre="http://qj95rst59.hn-bkt.clouddn.com/touxiang";
+
     public static String ImageStorePath="D:/toutiaoImage/";
 
     public static String NewsTitleNormalRegex="[\\u4e00-\\u9fa5a-zA-Z0-9]+";
 
     public static String MinganRegex="[\\S]*(杀人|鬼|淫|奸)+[\\S]*";
 
-    public static String LinkRegex="(http|ftp)(s)?://(\\w)+(\\.\\w+)+(/[\\w_\\?\\.&=%-]+)+";
+    public static String LinkRegex="(http|ftp)(s)?://(\\w)+(\\.\\w+)+(/[\\w_\\?\\.&=%-]+)*";
 
     public static String getJsonString(int code){
         JSONObject jsonObejct=new JSONObject();
@@ -83,5 +86,9 @@ public class CommonUtil {
             logger.error("生成MD5失败", e);
             return null;
         }
+    }
+
+    public static String getUserHeadUrl(){
+        return HeadUrlPre+(new Random().nextInt(6)+1)+".jpg";
     }
 }

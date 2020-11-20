@@ -25,7 +25,7 @@
                               <a target="_blank" rel="external nofollow" href="$!{news.link}">$!{news.title}</a>
                           </h3>
                           <div class="meta">
-                              $!{news.link}
+                              <a target="_blank" href=" $!{news.link}">去现场看看</a>
                               <span>
                                   <i class="fa icon-comment"></i> $!{news.commentCount}
                               </span>

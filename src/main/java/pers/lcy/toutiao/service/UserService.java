@@ -41,7 +41,7 @@ public class UserService {
         newUser.setName(username);
         newUser.setSalt(UUID.randomUUID().toString().substring(0,5));
         newUser.setPassword(CommonUtil.MD5(password + newUser.getSalt()));
-        newUser.setHeadUrl("/images/img/1.jpg");
+        newUser.setHeadUrl(CommonUtil.getUserHeadUrl());
         userMapper.addUser(newUser);
         String ticket=addLoginTicket(userMapper.selectUserIdByName(username));
         resMsg.put("ticket",ticket);

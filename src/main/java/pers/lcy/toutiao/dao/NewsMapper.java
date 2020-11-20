@@ -15,6 +15,8 @@ public interface NewsMapper {
 
     News selectById(@Param("newsId") int id);
 
+    List<News> selectLatestNews(@Param("limit") int limit);
+
     void updateCommentCount(@Param("newsId") int newsId,@Param("commentCount") int count);
 
     void updateLikeCount(@Param("newsId") int newsId,@Param("likeCount") int likeCount);

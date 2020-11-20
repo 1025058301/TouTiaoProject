@@ -39,6 +39,9 @@ public class LikeHandler implements IHandler {
 
     @Override
     public void doHandle(EventModel eventModel){
+        if(eventModel.getActorId()==eventModel.getEntityOwnerId()){
+            return;
+        }
         Message message=new Message();
         User user=userService.getUser(eventModel.getActorId());
         News news=newsService.selectNewsById(eventModel.getEntityId());

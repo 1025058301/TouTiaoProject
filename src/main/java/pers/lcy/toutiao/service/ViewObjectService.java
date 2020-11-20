@@ -7,6 +7,7 @@ import pers.lcy.toutiao.util.HostHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ViewObjectService {
@@ -30,13 +31,22 @@ public class ViewObjectService {
 
 
     public List<ViewObject> getNewsViewFromUserId(int userId){
-        List<News> list=newsService.getNews(userId,0,10);
-        List<ViewObject> vos=new ArrayList<ViewObject>();
-        for (News news:list) {
-            ViewObject viewObject=new ViewObject();
-            viewObject.set("news",news);
-            viewObject.set("user",userService.getUser(news.getUserId()));
-            if(hostHolder.get()!=null){
+        List<News> list = null;
+        if (userId != 0) {
+            list = newsService.getNewsByUser(userId, 0, 10);
+        } else {
+            Set<String> highNews=newsService.getNewsIdByScore(10);
+            list=new ArrayList<>();
+            for(String s: highNews){
+                list.add(newsService.selectNewsById(Integer.valueOf(s)));
+            }
+        }
+        List<ViewObject> vos = new ArrayList<ViewObject>();
+        for (News news : list) {
+            ViewObject viewObject = new ViewObject();
+            viewObject.set("news", news);
+            viewObject.set("user", userService.getUser(news.getUserId()));
+            if (hostHolder.get() != null) {
                 viewObject.set("like",likeService.getLikeStatus(hostHolder.get().getId(), EntityType.NEWSTYPE,news.getId()));
             }else {
                 viewObject.set("like",0);

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import pers.lcy.toutiao.controller.LoginController;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Tuple;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class JedisAdapter implements InitializingBean {
@@ -87,6 +89,7 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
+
     public void lpush(String key,String value){
         Jedis jedis=null;
         try {
@@ -106,6 +109,81 @@ public class JedisAdapter implements InitializingBean {
         try {
             jedis=getJedis();
             return jedis.rpop(key);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    public long zremrangeByRank(String key,long start,long stop){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.zremrangeByRank(key,start,stop);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+            return 0;
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+    }
+
+    public Set<Tuple> zrangeWithScores(String key, long start, long stop){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.zrangeWithScores(key,start,stop);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+            return null;
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+    }
+
+    public Set<String> zrevrange(String key, long start, long stop){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.zrevrange(key,start,stop);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+            return null;
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+    }
+
+    public Long zadd(String key,double score,String member){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.zadd(key,score,member);
+        }catch (Exception e){
+            logger.error("异常"+e.getMessage());
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    public Set<String> zadd(String key, long start, long stop){
+        Jedis jedis=null;
+        try {
+            jedis=getJedis();
+            return jedis.zrange(key,start,stop);
         }catch (Exception e){
             logger.error("异常"+e.getMessage());
         }finally {

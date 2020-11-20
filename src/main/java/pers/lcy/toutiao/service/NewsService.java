@@ -11,13 +11,12 @@ import pers.lcy.toutiao.dao.NewsMapper;
 import pers.lcy.toutiao.model.News;
 import pers.lcy.toutiao.util.CommonUtil;
 import pers.lcy.toutiao.util.HostHolder;
+import pers.lcy.toutiao.util.JedisAdapter;
+import pers.lcy.toutiao.util.RedisKeyUtil;
 
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class NewsService {
@@ -29,11 +28,23 @@ public class NewsService {
     @Autowired
     HostHolder hostHolder;
 
-    public List<News> getNews(int userId, int offset, int limit) {
+    @Autowired
+    JedisAdapter jedisAdapter;
+
+    public List<News> getNewsByUser(int userId, int offset, int limit) {
         return newsMapper.selectByUserIdAndOffset(userId, offset, limit);
     }
+
+    public List<News> getLatestNews(int num){
+        return newsMapper.selectLatestNews(num);
+    }
+
     public News selectNewsById(int newsId){
         return newsMapper.selectById(newsId);
+    }
+
+    public Set<String> getNewsIdByScore(int num){
+        return jedisAdapter.zrevrange(RedisKeyUtil.getBIZNewsKey(),0,num-1);
     }
 
     public Map<String,Object> addNews(String image, String title, String link){
@@ -59,6 +70,7 @@ public class NewsService {
         news.setCommentCount(0);
         news.setDeleteState(0);
         newsMapper.insertNews(news);
+        jedisAdapter.zadd(RedisKeyUtil.getBIZNewsKey(),1/Math.pow(2,1.5),String.valueOf(news.getId()));
         return null;
     }
 

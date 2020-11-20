@@ -47,8 +47,13 @@ public class IndexController {
     }
 
     @RequestMapping("/user/{userId}")
-    public String userIndex(Model model,@PathVariable("userId") int userId){
+    public String userIndex(Model model,@PathVariable("userId") int userId,
+                            @RequestParam(value = "pop",defaultValue = "0") int pop){
         model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(userId));
+        if(hostHolder.get()!=null){
+            pop=0;
+        }
+        model.addAttribute("pop",pop);
         return "home";
     }
 
