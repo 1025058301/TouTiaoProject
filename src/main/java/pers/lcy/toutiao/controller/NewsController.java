@@ -13,6 +13,7 @@ import pers.lcy.toutiao.model.*;
 import pers.lcy.toutiao.service.*;
 import pers.lcy.toutiao.util.CommonUtil;
 import pers.lcy.toutiao.util.HostHolder;
+import pers.lcy.toutiao.util.JedisAdapter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -46,6 +47,9 @@ public class NewsController {
 
     @Autowired
     LikeService likeService;
+
+    @Autowired
+    JedisAdapter jedisAdapter;
 
     @RequestMapping(value = "/uploadImage", method = {RequestMethod.POST})
     @ResponseBody
@@ -125,6 +129,7 @@ public class NewsController {
             comment.setUserId(hostHolder.get().getId());
             commentService.addComment(comment);
             int count=commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
+            jedisAdapter.updateNewsCommentCount(newsId,count);
             newsService.updateNewsCommentCount(newsId,count);
         }catch (Exception e){
             logger.error("提交评论错误"+e.toString());

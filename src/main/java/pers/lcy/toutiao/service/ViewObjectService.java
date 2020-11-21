@@ -1,16 +1,25 @@
 package pers.lcy.toutiao.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pers.lcy.toutiao.controller.IndexController;
 import pers.lcy.toutiao.model.*;
 import pers.lcy.toutiao.util.HostHolder;
+import pers.lcy.toutiao.util.JedisAdapter;
+import pers.lcy.toutiao.util.RedisKeyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 public class ViewObjectService {
+    public Logger logger= LoggerFactory.getLogger(ViewObjectService.class);
     @Autowired
     NewsService newsService;
 
@@ -29,17 +38,25 @@ public class ViewObjectService {
     @Autowired
     LikeService likeService;
 
+    @Autowired
+    JedisAdapter jedisAdapter;
 
-    public List<ViewObject> getNewsViewFromUserId(int userId){
+
+    public List<ViewObject> getNewsViewFromUserId(int userId) throws Exception{
         List<News> list = null;
         if (userId != 0) {
+            long time=System.currentTimeMillis();
             list = newsService.getNewsByUser(userId, 0, 10);
+            logger.info("数据库查数据花费"+(System.currentTimeMillis()-time)+"毫秒");
         } else {
             Set<String> highNews=newsService.getNewsIdByScore(10);
+            long time=System.currentTimeMillis();
             list=new ArrayList<>();
             for(String s: highNews){
-                list.add(newsService.selectNewsById(Integer.valueOf(s)));
+                Map<String,String> valMap=jedisAdapter.hgetAll(RedisKeyUtil.getBizNewskey(Integer.valueOf(s)));
+                list.add(newsService.ConstructNewsByMap(valMap));
             }
+            logger.info("redis取数据共花费"+(System.currentTimeMillis()-time)+"毫秒");
         }
         List<ViewObject> vos = new ArrayList<ViewObject>();
         for (News news : list) {

@@ -1,5 +1,7 @@
 package pers.lcy.toutiao.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,7 @@ import java.util.*;
  */
 @Controller
 public class IndexController {
-
+    public Logger logger= LoggerFactory.getLogger(IndexController.class);
     @Autowired
     NewsService newsService;
 
@@ -38,22 +40,32 @@ public class IndexController {
     @RequestMapping("/")
     public String index(Model model,
                         @RequestParam(value = "pop",defaultValue = "0") int pop) {
-        model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(0));
-        if(hostHolder.get()!=null){
-            pop=0;
+        try {
+            model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(0));
+            if(hostHolder.get()!=null){
+                pop=0;
+            }
+            model.addAttribute("pop",pop);
+            return "home";
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        model.addAttribute("pop",pop);
         return "home";
     }
 
     @RequestMapping("/user/{userId}")
     public String userIndex(Model model,@PathVariable("userId") int userId,
                             @RequestParam(value = "pop",defaultValue = "0") int pop){
-        model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(userId));
-        if(hostHolder.get()!=null){
-            pop=0;
+        try {
+            model.addAttribute("vos",viewObjectService.getNewsViewFromUserId(userId));
+            if(hostHolder.get()!=null){
+                pop=0;
+            }
+            model.addAttribute("pop",pop);
+            return "home";
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        model.addAttribute("pop",pop);
         return "home";
     }
 
@@ -63,6 +75,7 @@ public class IndexController {
     @ExceptionHandler
     @ResponseBody
     public String handlerException(Exception e){
+        e.printStackTrace();
         return "出现异常："+e.getMessage();
     }
 }

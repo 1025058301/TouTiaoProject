@@ -1,7 +1,6 @@
 package pers.lcy.toutiao.service;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.tomcat.jni.File;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import pers.lcy.toutiao.util.RedisKeyUtil;
 
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -44,7 +45,7 @@ public class NewsService {
     }
 
     public Set<String> getNewsIdByScore(int num){
-        return jedisAdapter.zrevrange(RedisKeyUtil.getBIZNewsKey(),0,num-1);
+        return jedisAdapter.zrevrange(RedisKeyUtil.getBIZNewsScoreKey(),0,num-1);
     }
 
     public Map<String,Object> addNews(String image, String title, String link){
@@ -69,8 +70,10 @@ public class NewsService {
         news.setUserId(hostHolder.get().getId());
         news.setCommentCount(0);
         news.setDeleteState(0);
+        news.setCreatedDate(new Date());
         newsMapper.insertNews(news);
-        jedisAdapter.zadd(RedisKeyUtil.getBIZNewsKey(),1/Math.pow(2,1.5),String.valueOf(news.getId()));
+        jedisAdapter.zadd(RedisKeyUtil.getBIZNewsScoreKey(),1/Math.pow(2,1.5),String.valueOf(news.getId()));
+        jedisAdapter.addObejectInHashes(news);
         return null;
     }
 
@@ -95,6 +98,21 @@ public class NewsService {
 
     public void updateNewsLikeCount(int newsId, int likeCount) {
         newsMapper.updateLikeCount(newsId, likeCount);
+    }
+
+    public News ConstructNewsByMap(Map<String,String> map) throws Exception{
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-mm-dd");
+        News news=new News();
+        news.setId(Integer.valueOf(map.get("id")));
+        news.setImage(map.get("image"));
+        news.setTitle(map.get("title"));
+        news.setLink(map.get("link"));
+        news.setLikeCount(Integer.valueOf(map.get("likeCount")));
+        news.setUserId(Integer.valueOf(map.get("userId")));
+        news.setCommentCount(Integer.valueOf(map.get("commentCount")));
+        news.setDeleteState(Integer.valueOf(map.get("deleteState")));
+        news.setCreatedDate(new Date(map.get("createdDate")));
+        return news;
     }
 }
 

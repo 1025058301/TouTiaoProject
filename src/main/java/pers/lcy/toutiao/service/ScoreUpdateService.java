@@ -12,7 +12,6 @@ import pers.lcy.toutiao.util.JedisAdapter;
 import pers.lcy.toutiao.util.RedisKeyUtil;
 import redis.clients.jedis.Tuple;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -33,15 +32,15 @@ public class ScoreUpdateService {
         logger.info("开始每隔一小时进行一次的资讯分数更新操作");
         long beforeTime=System.currentTimeMillis();
         List<News> latestNews=newsService.getLatestNews(100);
-        Set<Tuple> allVal=jedisAdapter.zrangeWithScores(RedisKeyUtil.getBIZNewsKey(),0,-1);
+        Set<Tuple> allVal=jedisAdapter.zrangeWithScores(RedisKeyUtil.getBIZNewsScoreKey(),0,-1);
         for(Tuple tuple:allVal){
-            jedisAdapter.zadd(RedisKeyUtil.getBIZNewsKey(),tuple.getScore()*0.1,tuple.getElement());
+            jedisAdapter.zadd(RedisKeyUtil.getBIZNewsScoreKey(),tuple.getScore()*0.1,tuple.getElement());
         }
         for(News news:latestNews){
             long exsitTime=System.currentTimeMillis()-news.getCreatedDate().getTime();
             int likeCount=news.getLikeCount();
             double score=(likeCount+1)/Math.pow((double) (2+exsitTime/1000/60/60),1.5);
-            jedisAdapter.zadd(RedisKeyUtil.getBIZNewsKey(),score,String.valueOf(news.getId()));
+            jedisAdapter.zadd(RedisKeyUtil.getBIZNewsScoreKey(),score,String.valueOf(news.getId()));
         }
         logger.info("更新完成，共耗费时间"+(System.currentTimeMillis()-beforeTime)+"毫秒");
     }
