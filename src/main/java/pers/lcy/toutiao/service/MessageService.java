@@ -1,6 +1,5 @@
 package pers.lcy.toutiao.service;
 
-import com.sun.xml.internal.ws.api.model.MEP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.lcy.toutiao.dao.MessageMapper;

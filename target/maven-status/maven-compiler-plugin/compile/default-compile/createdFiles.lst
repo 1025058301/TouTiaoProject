@@ -1,11 +1,10 @@
+pers\lcy\toutiao\service\UserService.class
 pers\lcy\toutiao\service\NewsService.class
 pers\lcy\toutiao\model\News.class
 pers\lcy\toutiao\model\User.class
 pers\lcy\toutiao\dao\NewsMapper.class
 pers\lcy\toutiao\dao\UserMapper.class
 pers\lcy\toutiao\model\ViewObject.class
-pers\lcy\toutiao\service\UserService.class
 pers\lcy\toutiao\service\ViewObjectService.class
 pers\lcy\toutiao\ToutiaoApplication.class
-pers\lcy\toutiao\aspect\LogAspect.class
 pers\lcy\toutiao\controller\IndexController.class
